@@ -6,9 +6,15 @@ console.log("Server Config:", {
 });
 
 export default ({ env }) => ({
-  host: env('HOST', '0.0.0.0'),
+  host: env("HOST", "0.0.0.0"),
   port: env.int("PORT", process.env.PORT || 10000),
   app: {
-    keys: env.array('APP_KEYS'),
+    keys: env.array("APP_KEYS"),
   },
+  settings: {
+    cors: {
+      origin: ["*"], // Allow all origins, or specify frontend domains
+    },
+  },
+  allowedHosts: ["ott-cms.onrender.com"], // Add your Render host
 });
