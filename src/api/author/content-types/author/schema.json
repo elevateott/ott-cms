@@ -15,19 +15,27 @@
     "name": {
       "type": "string"
     },
+    "bio": {
+      "type": "richtext"
+    },
     "avatar": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "files", "videos"]
-    },
-    "email": {
-      "type": "string"
+      "allowedTypes": [
+        "images"
+      ]
     },
     "articles": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::article.article",
+      "mappedBy": "author"
+    },
+    "mux_asset": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::mux-video-uploader.mux-asset",
       "mappedBy": "author"
     }
   }
