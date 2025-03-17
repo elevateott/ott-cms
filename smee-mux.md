@@ -23,12 +23,12 @@ npm install --global smee-client
 Now, run the following command to start listening for webhooks from Mux:
 
 ```bash
-smee -u https://smee.io/xdcfVCRWdTN9ED --target http://localhost:1337/mux-video-uploader/webhook-handler
+smee -u https://smee.io/xdcfVCRWdTN9ED --target http://localhost:1337/api/mux/webhook
 
 ```
 ✅ **Breakdown:**
 - `-u https://smee.io/xdcfVCRWdTN9ED` → **Your unique webhook proxy URL**.
-- `--target http://localhost:1337/mux-video-uploader/webhook-handler` → **Where the webhook is forwarded in your local Strapi app**.
+- `--target http://localhost:1337/api/mux/webhook` → **Where the webhook is forwarded in your local Strapi app**.
 
 🚀 **Now, webhooks sent to `smee.io/xdcfVCRWdTN9ED` will be forwarded to your Strapi app!** 🎉
 
@@ -134,7 +134,7 @@ smee -u https://smee.io/xdcfVCRWdTN9ED --target http://localhost:1337/api/mux/we
 | **Step** | **Action** |
 |---------|-----------|
 | **1️⃣ Install `smee-client`** | `npm install --global smee-client` |
-| **2️⃣ Start Webhook Proxy** | `smee -u https://smee.io/xdcfVCRWdTN9ED --target http://localhost:1337/mux-video-uploader/webhook-handler` |
+| **2️⃣ Start Webhook Proxy** | `smee -u https://smee.io/xdcfVCRWdTN9ED --target http://localhost:1337/api/mux/webhook` |
 | **3️⃣ Register Webhook in Mux** | Add `smee.io` URL to Mux Dashboard |
 | **4️⃣ Create Webhook Handler in Strapi** | `/api/mux/controllers/mux.js` |
 | **5️⃣ Define Webhook Route** | `/api/mux/routes/mux.js` |
