@@ -136,6 +136,16 @@ const routes = [
       prefix: false,
     },
   },
+  {
+    method: 'GET',
+    path: '/custom-strapi-plugin-mux/health',
+    handler: (ctx) => {
+      ctx.body = { status: 'ok', timestamp: new Date().toISOString() };
+    },
+    config: {
+      auth: false,
+    },
+  }
 ];
 
 export default routes;

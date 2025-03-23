@@ -1,6 +1,7 @@
 export default ({ env }) => ({
   "custom-strapi-plugin-mux": {
     enabled: true,
+    resolve: './src/plugins/custom-strapi-plugin-mux', // Explicitly provide the path
     config: {
       accessTokenId: env("MUX_TOKEN_ID"),
       secretKey: env("MUX_TOKEN_SECRET"),

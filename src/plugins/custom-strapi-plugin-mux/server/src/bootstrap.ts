@@ -3,6 +3,9 @@ import type { Core } from '@strapi/strapi';
 import { PLUGIN_NAME } from './constants/index';
 
 const bootstrap = async ({ strapi }: { strapi: Core.Strapi }) => {
+
+  console.log('Mux plugin: bootstrap function called');
+  
   // @ts-ignore - No types for global strapi variable
   if (Object.keys(strapi.plugins).indexOf('users-permissions') === -1) {
     throw new Error('The users-permissions plugin is required in order to use the Mux Video Uploader');
