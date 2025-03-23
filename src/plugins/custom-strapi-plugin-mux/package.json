@@ -30,7 +30,7 @@
     "verify": "strapi-plugin verify",
     "watch": "strapi-plugin watch",
     "watch:link": "strapi-plugin watch:link",
-    "production-build": "npm install && npm run build"
+    "production-build": "npm install && npm run build -- --no-typescript"
   },
   "dependencies": {
     "@mux/mux-node": "^8.8.0",
