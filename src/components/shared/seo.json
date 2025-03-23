@@ -10,10 +10,12 @@
   "attributes": {
     "metaTitle": {
       "type": "string",
+      "maxLength": 60,
       "required": true
     },
     "metaDescription": {
       "type": "text",
+      "maxLength": 170,
       "required": true
     },
     "shareImage": {
@@ -24,7 +26,7 @@
         "images"
       ]
     },
-    "websiteUrl": {
+    "permalink": {
       "type": "string"
     }
   }

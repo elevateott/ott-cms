@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_content_subtitles",
+  "info": {
+    "displayName": "Subtitle"
+  },
+  "options": {},
+  "attributes": {
+    "language": {
+      "type": "enumeration",
+      "enum": [
+        "en",
+        "es",
+        "fr",
+        "de"
+      ]
+    },
+    "file": {
+      "type": "media"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 export default ({ env }) => ({
-  "mux-video-uploader": {
+  "custom-strapi-plugin-mux": {
     enabled: true,
     config: {
       accessTokenId: env("MUX_TOKEN_ID"),

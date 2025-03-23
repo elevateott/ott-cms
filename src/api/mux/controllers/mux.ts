@@ -13,7 +13,7 @@ module.exports = {
         try {
           // Access the plugin's controller directly and call its webhook handler
           await strapi
-            .plugin("mux-video-uploader")
+            .plugin("custom-strapi-plugin-mux")
             .controller("mux")
             .muxWebhookHandler(ctx, () => Promise.resolve());
 

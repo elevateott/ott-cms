@@ -1,0 +1,168 @@
+{
+  "kind": "collectionType",
+  "collectionName": "subscriptions",
+  "info": {
+    "singularName": "subscription",
+    "pluralName": "subscriptions",
+    "displayName": "Subscription Plan",
+    "description": "Defines a subscription plan with pricing, billing, expiration, and access rules."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    },
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 255,
+      "minLength": 3,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "description": "The name of the subscription plan (e.g., 'Premium Plan')."
+    },
+    "Description": {
+      "type": "richtext",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "description": "Detailed information about the plan's features and benefits."
+    },
+    "Image": {
+      "type": "media",
+      "allowedTypes": [
+        "images"
+      ],
+      "required": true,
+      "description": "Promotional image for the plan (recommended size: 995x560)."
+    },
+    "Price": {
+      "type": "decimal",
+      "required": true,
+      "min": 0,
+      "description": "Cost of the subscription."
+    },
+    "TrialPeriodDays": {
+      "type": "integer",
+      "min": 0,
+      "default": 0,
+      "description": "Duration of the free trial in days."
+    },
+    "BillingPeriod": {
+      "type": "enumeration",
+      "enum": [
+        "Monthly",
+        "Quarterly",
+        "Semi-Annual",
+        "Annual"
+      ],
+      "required": true,
+      "default": "Monthly",
+      "description": "Defines the billing cycle for the subscription."
+    },
+    "AllowPausing": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indicates if subscribers can pause their subscription."
+    },
+    "Availability": {
+      "type": "enumeration",
+      "enum": [
+        "Public",
+        "Private"
+      ],
+      "required": true,
+      "default": "Public",
+      "description": "Defines whether the subscription is publicly visible or private."
+    },
+    "SignUpURL": {
+      "type": "string",
+      "format": "uri",
+      "required": true,
+      "description": "Link to the subscription's sign-up page."
+    },
+    "GroupSubscription": {
+      "type": "boolean",
+      "default": false,
+      "description": "Specifies if the plan supports group access."
+    },
+    "FreeAccess": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indicates if the subscription is free."
+    },
+    "PriceAdjustmentHistory": {
+      "type": "json",
+      "description": "Records any price changes, including dates and affected subscriber groups."
+    },
+    "RenewalPolicy": {
+      "type": "richtext",
+      "description": "Details on how and when the subscription renews."
+    },
+    "FraudPreventionMeasures": {
+      "type": "richtext",
+      "description": "Outline of steps taken to prevent fraud and handle chargebacks."
+    },
+    "InAppPurchaseIDs": {
+      "type": "json",
+      "description": "Stores in-app purchase IDs for different platforms (Roku, iOS, Android, Fire TV, etc.)."
+    },
+    "UserLimit": {
+      "type": "integer",
+      "min": 1,
+      "default": 1,
+      "description": "Maximum number of users allowed under a group subscription."
+    },
+    "Analytics": {
+      "type": "json",
+      "description": "Stores data on user engagement and subscription metrics."
+    },
+    "CancellationPolicy": {
+      "type": "richtext",
+      "description": "Terms and conditions regarding subscription cancellations."
+    },
+    "UpgradeDowngradeOptions": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::subscription.subscription",
+      "description": "Links to other subscription plans available for upgrade or downgrade."
+    },
+    "ExpirationDate": {
+      "type": "datetime",
+      "description": "Optional expiration date for the subscription plan."
+    },
+    "ActiveUsers": {
+      "type": "integer",
+      "min": 0,
+      "default": 0,
+      "description": "Tracks the number of currently active subscribers."
+    },
+    "BusinessRules": {
+      "type": "json",
+      "description": "Additional business-specific rules for the subscription plan."
+    },
+    "ContentAccess": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::content.content",
+      "description": "Specifies which content (videos, courses) is accessible with this plan."
+    }
+  }
+}

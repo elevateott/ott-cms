@@ -1,5 +1,68 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface AccessContentAccess extends Struct.ComponentSchema {
+  collectionName: 'components_access_content_accesses';
+  info: {
+    displayName: 'ContentAccess';
+  };
+  attributes: {
+    accessLevel: Schema.Attribute.Enumeration<['public', 'gated']>;
+    downloadable: Schema.Attribute.Boolean;
+    expirationDate: Schema.Attribute.DateTime;
+    releaseDate: Schema.Attribute.DateTime;
+  };
+}
+
+export interface AccessVisibility extends Struct.ComponentSchema {
+  collectionName: 'components_access_content_visibilities';
+  info: {
+    description: 'Controls content publishing status, scheduling, and expiration.';
+    displayName: 'Visibility';
+    icon: 'eye';
+  };
+  attributes: {
+    ExpirationDate: Schema.Attribute.DateTime;
+    ScheduledDate: Schema.Attribute.DateTime;
+    Status: Schema.Attribute.Enumeration<
+      ['Unpublished', 'Published', 'Scheduled']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Unpublished'>;
+  };
+}
+
+export interface AnalyticsFoo2 extends Struct.ComponentSchema {
+  collectionName: 'components_analytics_foo_2s';
+  info: {
+    displayName: 'Foo 2';
+  };
+  attributes: {
+    Name: Schema.Attribute.String;
+  };
+}
+
+export interface ContentResource extends Struct.ComponentSchema {
+  collectionName: 'components_content_resources';
+  info: {
+    displayName: 'Resource';
+  };
+  attributes: {
+    file: Schema.Attribute.Media;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface ContentSubtitle extends Struct.ComponentSchema {
+  collectionName: 'components_content_subtitles';
+  info: {
+    displayName: 'Subtitle';
+  };
+  attributes: {
+    file: Schema.Attribute.Media;
+    language: Schema.Attribute.Enumeration<['en', 'es', 'fr', 'de']>;
+  };
+}
+
 export interface SharedMedia extends Struct.ComponentSchema {
   collectionName: 'components_shared_media';
   info: {
@@ -19,17 +82,6 @@ export interface SharedQuote extends Struct.ComponentSchema {
   };
   attributes: {
     body: Schema.Attribute.Text;
-    title: Schema.Attribute.String;
-  };
-}
-
-export interface SharedResource extends Struct.ComponentSchema {
-  collectionName: 'components_shared_resources';
-  info: {
-    displayName: 'Resource';
-  };
-  attributes: {
-    file: Schema.Attribute.Media;
     title: Schema.Attribute.String;
   };
 }
@@ -55,10 +107,18 @@ export interface SharedSeo extends Struct.ComponentSchema {
     name: 'SEO';
   };
   attributes: {
-    metaDescription: Schema.Attribute.Text & Schema.Attribute.Required;
-    metaTitle: Schema.Attribute.String & Schema.Attribute.Required;
+    metaDescription: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 170;
+      }>;
+    metaTitle: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    permalink: Schema.Attribute.String;
     shareImage: Schema.Attribute.Media<'images'>;
-    websiteUrl: Schema.Attribute.String;
   };
 }
 
@@ -74,8 +134,9 @@ export interface SharedSlider extends Struct.ComponentSchema {
   };
 }
 
-export interface SharedSubscriptionOptions extends Struct.ComponentSchema {
-  collectionName: 'components_shared_subscription_options';
+export interface SubscriptionsSubscriptionOptions
+  extends Struct.ComponentSchema {
+  collectionName: 'components_subscriptions_subscription_options';
   info: {
     displayName: 'Subscription Options';
   };
@@ -89,43 +150,20 @@ export interface SharedSubscriptionOptions extends Struct.ComponentSchema {
   };
 }
 
-export interface SharedSubtitle extends Struct.ComponentSchema {
-  collectionName: 'components_shared_subtitles';
-  info: {
-    displayName: 'Subtitle';
-  };
-  attributes: {
-    file: Schema.Attribute.Media;
-    language: Schema.Attribute.Enumeration<['en', 'es', 'fr', 'de']>;
-  };
-}
-
-export interface SharedVisibility extends Struct.ComponentSchema {
-  collectionName: 'components_shared_visibilities';
-  info: {
-    displayName: 'Visibility';
-    icon: 'eye';
-  };
-  attributes: {
-    accessLevel: Schema.Attribute.Enumeration<['public', 'gated']>;
-    downloadable: Schema.Attribute.Boolean;
-    expirationDate: Schema.Attribute.DateTime;
-    releaseDate: Schema.Attribute.DateTime;
-  };
-}
-
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'access.content-access': AccessContentAccess;
+      'access.visibility': AccessVisibility;
+      'analytics.foo-2': AnalyticsFoo2;
+      'content.resource': ContentResource;
+      'content.subtitle': ContentSubtitle;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;
-      'shared.resource': SharedResource;
       'shared.rich-text': SharedRichText;
       'shared.seo': SharedSeo;
       'shared.slider': SharedSlider;
-      'shared.subscription-options': SharedSubscriptionOptions;
-      'shared.subtitle': SharedSubtitle;
-      'shared.visibility': SharedVisibility;
+      'subscriptions.subscription-options': SubscriptionsSubscriptionOptions;
     }
   }
 }

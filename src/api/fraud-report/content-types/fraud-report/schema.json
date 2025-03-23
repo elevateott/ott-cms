@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "fraud_reports",
+  "info": {
+    "singularName": "fraud-report",
+    "pluralName": "fraud-reports",
+    "displayName": "Fraud Report",
+    "description": "Tracks fraud-related incidents and their resolution status."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "User": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "required": true,
+      "description": "User associated with the fraud incident."
+    },
+    "IncidentDate": {
+      "type": "datetime",
+      "required": true,
+      "description": "Date and time when the incident occurred."
+    },
+    "Description": {
+      "type": "richtext",
+      "required": true,
+      "description": "Detailed explanation of the fraud incident."
+    },
+    "ResolutionStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Pending",
+        "Resolved"
+      ],
+      "required": true,
+      "default": "Pending",
+      "description": "Current status of the fraud report."
+    }
+  }
+}

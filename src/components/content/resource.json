@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_content_resources",
+  "info": {
+    "displayName": "Resource"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "file": {
+      "type": "media"
+    }
+  }
+}

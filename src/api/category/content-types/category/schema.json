@@ -10,7 +10,17 @@
   "options": {
     "draftAndPublish": false
   },
-  "pluginOptions": {},
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    },
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
   "attributes": {
     "name": {
       "type": "string"
@@ -30,12 +40,6 @@
       "components": [
         "shared.seo"
       ]
-    },
-    "articles": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::article.article",
-      "mappedBy": "category"
     }
   }
 }

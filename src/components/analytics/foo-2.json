@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_analytics_foo_2s",
+  "info": {
+    "displayName": "Foo 2"
+  },
+  "options": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    }
+  }
+}

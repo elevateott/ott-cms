@@ -1,0 +1,72 @@
+export default {
+  kind: 'collectionType',
+  collectionName: 'muxassets',
+  info: {
+    description: 'Represents a Mux Asset item, including upload and playback details',
+    displayName: 'Mux Asset',
+    singularName: 'mux-asset',
+    pluralName: 'mux-assets',
+  },
+  pluginOptions: {
+    'content-manager': {
+      visible: true,
+    },
+    'content-type-builder': {
+      visible: true,
+    },
+  },
+  options: {
+    draftAndPublish: false,
+  },
+  attributes: {
+    title: {
+      type: 'string',
+      private: false,
+      required: true,
+      maxLength: 255,
+      minLength: 3,
+      configurable: true,
+    },
+    upload_id: {
+      type: 'string',
+      required: false,
+      maxLength: 255,
+    },
+    asset_id: {
+      type: 'string',
+      required: false,
+      maxLength: 255,
+    },
+    playback_id: {
+      type: 'string',
+      required: false,
+      maxLength: 255,
+    },
+    signed: {
+      type: 'boolean',
+      default: false,
+      required: true,
+    },
+    error_message: {
+      type: 'string',
+      required: false,
+      maxLength: 255,
+    },
+    isReady: {
+      type: 'boolean',
+      default: false,
+      required: false,
+    },
+    duration: {
+      type: 'decimal',
+      required: false,
+    },
+    aspect_ratio: {
+      type: 'string',
+      required: false,
+    },
+    asset_data: {
+      type: 'json',
+    },
+  },
+};

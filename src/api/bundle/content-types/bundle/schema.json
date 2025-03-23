@@ -12,6 +12,12 @@
   "pluginOptions": {
     "i18n": {
       "localized": true
+    },
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
     }
   },
   "attributes": {

@@ -1,0 +1,113 @@
+{
+  "kind": "collectionType",
+  "collectionName": "audience",
+  "info": {
+    "singularName": "audience",
+    "pluralName": "audiences",
+    "displayName": "Audience",
+    "name": "audience",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "key": {
+      "type": "uid",
+      "targetField": "Username"
+    },
+    "Username": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 100
+    },
+    "Email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "FirstName": {
+      "type": "string",
+      "required": false,
+      "maxLength": 100,
+      "description": "User's first name."
+    },
+    "LastName": {
+      "type": "string",
+      "required": false,
+      "maxLength": 100,
+      "description": "User's last name."
+    },
+    "PhoneNumber": {
+      "type": "string",
+      "required": false,
+      "maxLength": 15,
+      "unique": true,
+      "regex": "^[+]?[0-9]{10,15}$",
+      "description": "User's phone number in international format (e.g., +1234567890)."
+    },
+    "Avatar": {
+      "type": "media",
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Profile picture of the user."
+    },
+    "Password": {
+      "type": "password",
+      "required": true
+    },
+    "SubscriptionPlan": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::subscription.subscription",
+      "description": "Links to the user's active subscription (if any)."
+    },
+    "SubscriptionStatus": {
+      "type": "enumeration",
+      "enum": [
+        "NoSubscription",
+        "Active",
+        "Paused",
+        "Cancelled"
+      ],
+      "required": true,
+      "default": "NoSubscription",
+      "description": "Tracks the user's subscription status."
+    },
+    "IsSubscriber": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indicates if the user has an active subscription."
+    },
+    "SignUpDate": {
+      "type": "datetime",
+      "required": true,
+      "default": "NOW"
+    },
+    "LastLogin": {
+      "type": "datetime",
+      "description": "Tracks the last time the user logged in."
+    },
+    "FraudFlags": {
+      "type": "boolean",
+      "default": false,
+      "description": "Marks the user as flagged for potential fraud."
+    },
+    "BillingHistory": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::billing-history.billing-history",
+      "description": "Links to all payments made by the user."
+    }
+  }
+}

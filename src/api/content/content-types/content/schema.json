@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "contents",
+  "info": {
+    "singularName": "content",
+    "pluralName": "contents",
+    "displayName": "Content",
+    "description": "Manages content types and their access levels."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 255,
+      "description": "Title of the content."
+    },
+    "Type": {
+      "type": "enumeration",
+      "enum": [
+        "Video",
+        "Article",
+        "Course"
+      ],
+      "required": true,
+      "description": "Defines the content format."
+    },
+    "AccessLevel": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::subscription.subscription",
+      "description": "Defines which subscription plans grant access to this content."
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "creators",
+  "info": {
+    "singularName": "creator",
+    "pluralName": "creators",
+    "displayName": "Creator"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "richtext"
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "mux_asset": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::custom-strapi-plugin-mux.mux-asset",
+      "mappedBy": "author"
+    }
+  }
+}

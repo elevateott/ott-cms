@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_access_content_visibilities",
+  "info": {
+    "displayName": "Visibility",
+    "icon": "eye",
+    "description": "Controls content publishing status, scheduling, and expiration."
+  },
+  "options": {},
+  "attributes": {
+    "Status": {
+      "type": "enumeration",
+      "enum": [
+        "Unpublished",
+        "Published",
+        "Scheduled"
+      ],
+      "default": "Unpublished",
+      "required": true
+    },
+    "ScheduledDate": {
+      "type": "datetime",
+      "description": "The date and time when content should be published.",
+      "required": false
+    },
+    "ExpirationDate": {
+      "type": "datetime",
+      "description": "The date and time when content should expire.",
+      "required": false
+    }
+  }
+}

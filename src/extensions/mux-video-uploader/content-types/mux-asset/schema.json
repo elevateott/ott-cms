@@ -1,9 +1,9 @@
 {
   "kind": "collectionType",
-  "collectionName": "muxassets",
+  "collectionName": "mux-assets",
   "info": {
     "description": "Represents a Mux Asset item, including upload and playback details",
-    "displayName": "Mux Video",
+    "displayName": "Video - Mux",
     "singularName": "mux-asset",
     "pluralName": "mux-assets"
   },
@@ -11,6 +11,9 @@
     "draftAndPublish": false
   },
   "pluginOptions": {
+    "i18n": {
+      "localized": true
+    },
     "content-manager": {
       "visible": true
     },
@@ -66,14 +69,8 @@
     "asset_data": {
       "type": "json"
     },
-    "test": {
+    "Test": {
       "type": "string"
-    },
-    "author": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::author.author",
-      "inversedBy": "mux_asset"
     }
   }
 }

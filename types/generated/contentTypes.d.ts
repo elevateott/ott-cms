@@ -380,6 +380,17 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
   options: {
     draftAndPublish: false;
   };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
     blocks: Schema.Attribute.DynamicZone<
       ['shared.media', 'shared.quote', 'shared.rich-text', 'shared.slider']
@@ -387,9 +398,8 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::about.about'> &
-      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::about.about'>;
     publishedAt: Schema.Attribute.DateTime;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
@@ -409,12 +419,21 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
-    author: Schema.Attribute.Relation<'manyToOne', 'api::author.author'>;
     blocks: Schema.Attribute.DynamicZone<
       ['shared.media', 'shared.quote', 'shared.rich-text', 'shared.slider']
     >;
-    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     cover: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -423,12 +442,11 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 80;
       }>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::article.article'
-    > &
-      Schema.Attribute.Private;
+    >;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'>;
     title: Schema.Attribute.String;
@@ -438,39 +456,62 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiAuthorAuthor extends Struct.CollectionTypeSchema {
-  collectionName: 'authors';
+export interface ApiBillingHistoryBillingHistory
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'billing_histories';
   info: {
-    description: 'Create authors for your content';
-    displayName: 'Author';
-    pluralName: 'authors';
-    singularName: 'author';
+    description: 'Records transactions for users and their subscription plans.';
+    displayName: 'Billing History';
+    pluralName: 'billing-histories';
+    singularName: 'billing-history';
   };
   options: {
     draftAndPublish: false;
   };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
+  };
   attributes: {
-    articles: Schema.Attribute.Relation<'oneToMany', 'api::article.article'>;
-    avatar: Schema.Attribute.Media<'images'>;
-    bio: Schema.Attribute.RichText;
+    Amount: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    Date: Schema.Attribute.DateTime & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::author.author'
+      'api::billing-history.billing-history'
     > &
       Schema.Attribute.Private;
-    mux_asset: Schema.Attribute.Relation<
-      'oneToOne',
-      'plugin::mux-video-uploader.mux-asset'
-    >;
-    name: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    Status: Schema.Attribute.Enumeration<['Paid', 'Failed', 'Refunded']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Paid'>;
+    SubscriptionPlan: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::subscription.subscription'
+    > &
+      Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    User: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    > &
+      Schema.Attribute.Required;
   };
 }
 
@@ -485,6 +526,12 @@ export interface ApiBundleBundle extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
     i18n: {
       localized: true;
     };
@@ -505,6 +552,50 @@ export interface ApiBundleBundle extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCarouselCarousel extends Struct.CollectionTypeSchema {
+  collectionName: 'carousels';
+  info: {
+    description: 'A customizable row of videos for the frontend.';
+    displayName: 'Carousel';
+    pluralName: 'carousels';
+    singularName: 'carousel';
+  };
+  options: {
+    comment: '';
+    draftAndPublish: false;
+  };
+  attributes: {
+    Category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::carousel.carousel'
+    > &
+      Schema.Attribute.Private;
+    Position: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<1>;
+    publishedAt: Schema.Attribute.DateTime;
+    SelectionType: Schema.Attribute.Enumeration<
+      ['Category', 'Author', 'Custom']
+    > &
+      Schema.Attribute.DefaultTo<'Category'>;
+    Title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Visibility: Schema.Attribute.Component<'access.visibility', false>;
+  };
+}
+
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -516,19 +607,28 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   options: {
     draftAndPublish: false;
   };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
-    articles: Schema.Attribute.Relation<'oneToMany', 'api::article.article'>;
     blocks: Schema.Attribute.DynamicZone<['shared.seo']>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.RichText;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::category.category'
-    > &
-      Schema.Attribute.Private;
+    >;
     name: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID;
@@ -539,47 +639,125 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiExternalVideoExternalVideo
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'external_videos';
+export interface ApiContentContent extends Struct.CollectionTypeSchema {
+  collectionName: 'contents';
   info: {
-    displayName: 'External Video';
-    pluralName: 'external-videos';
-    singularName: 'external-video';
+    description: 'Manages content types and their access levels.';
+    displayName: 'Content';
+    pluralName: 'contents';
+    singularName: 'content';
   };
   options: {
     draftAndPublish: true;
   };
   pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
+  };
+  attributes: {
+    AccessLevel: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::subscription.subscription'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::content.content'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    Title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    Type: Schema.Attribute.Enumeration<['Video', 'Article', 'Course']> &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiCreatorCreator extends Struct.CollectionTypeSchema {
+  collectionName: 'creators';
+  info: {
+    displayName: 'Creator';
+    pluralName: 'creators';
+    singularName: 'creator';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    avatar: Schema.Attribute.Media<'images'>;
+    bio: Schema.Attribute.RichText;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::creator.creator'
+    > &
+      Schema.Attribute.Private;
+    mux_asset: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::custom-strapi-plugin-mux.mux-asset'
+    >;
+    name: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiEmbeddedVideoEmbeddedVideo
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'embedded_videos';
+  info: {
+    description: 'this is for embedded videos.';
+    displayName: 'Video - Embedded';
+    pluralName: 'embedded-videos';
+    singularName: 'embedded-video';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
     i18n: {
       localized: true;
     };
   };
   attributes: {
-    blocks: Schema.Attribute.DynamicZone<
-      [
-        'shared.seo',
-        'shared.subtitle',
-        'shared.visibility',
-        'shared.resource',
-        'shared.subscription-options',
-      ]
-    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.RichText;
     duration: Schema.Attribute.Integer;
-    externalHlsUrl: Schema.Attribute.String;
     featuredCategoryThumbnail: Schema.Attribute.Media;
     featuredCategoryVideo: Schema.Attribute.Media;
+    hlsUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::external-video.external-video'
+      'api::embedded-video.embedded-video'
     >;
-    muxAssetId: Schema.Attribute.String & Schema.Attribute.Unique;
-    muxPlaybackId: Schema.Attribute.String & Schema.Attribute.Unique;
     publishedAt: Schema.Attribute.DateTime;
     shortDescription: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
@@ -588,16 +766,63 @@ export interface ApiExternalVideoExternalVideo
     status: Schema.Attribute.Enumeration<['draft', 'published', 'archived']> &
       Schema.Attribute.DefaultTo<'draft'>;
     thumbnail: Schema.Attribute.Media;
-    title: Schema.Attribute.String &
+    Title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
-        maxLength: 300;
+        maxLength: 255;
+        minLength: 3;
       }>;
     trailerUrl: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     uploadedOn: Schema.Attribute.DateTime;
+  };
+}
+
+export interface ApiFraudReportFraudReport extends Struct.CollectionTypeSchema {
+  collectionName: 'fraud_reports';
+  info: {
+    description: 'Tracks fraud-related incidents and their resolution status.';
+    displayName: 'Fraud Report';
+    pluralName: 'fraud-reports';
+    singularName: 'fraud-report';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Description: Schema.Attribute.RichText & Schema.Attribute.Required;
+    IncidentDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::fraud-report.fraud-report'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    ResolutionStatus: Schema.Attribute.Enumeration<['Pending', 'Resolved']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Pending'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    User: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    > &
+      Schema.Attribute.Required;
   };
 }
 
@@ -627,6 +852,157 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     siteDescription: Schema.Attribute.Text & Schema.Attribute.Required;
     siteName: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSubscriptionSubscription
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'subscriptions';
+  info: {
+    description: 'Defines a subscription plan with pricing, billing, expiration, and access rules.';
+    displayName: 'Subscription Plan';
+    pluralName: 'subscriptions';
+    singularName: 'subscription';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    ActiveUsers: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    AllowPausing: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    Analytics: Schema.Attribute.JSON;
+    Availability: Schema.Attribute.Enumeration<['Public', 'Private']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Public'>;
+    BillingPeriod: Schema.Attribute.Enumeration<
+      ['Monthly', 'Quarterly', 'Semi-Annual', 'Annual']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Monthly'>;
+    BusinessRules: Schema.Attribute.JSON;
+    CancellationPolicy: Schema.Attribute.RichText;
+    ContentAccess: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::content.content'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Description: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ExpirationDate: Schema.Attribute.DateTime;
+    FraudPreventionMeasures: Schema.Attribute.RichText;
+    FreeAccess: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    GroupSubscription: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    Image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    InAppPurchaseIDs: Schema.Attribute.JSON;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::subscription.subscription'
+    >;
+    Price: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    PriceAdjustmentHistory: Schema.Attribute.JSON;
+    publishedAt: Schema.Attribute.DateTime;
+    RenewalPolicy: Schema.Attribute.RichText;
+    SignUpURL: Schema.Attribute.String & Schema.Attribute.Required;
+    Title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+        minLength: 3;
+      }>;
+    TrialPeriodDays: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    UpgradeDowngradeOptions: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::subscription.subscription'
+    >;
+    UserLimit: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<1>;
+  };
+}
+
+export interface ApiVideoRouterVideoRouter extends Struct.SingleTypeSchema {
+  collectionName: 'video_routers';
+  info: {
+    description: 'Video management portal';
+    displayName: 'Video';
+    pluralName: 'video-routers';
+    singularName: 'video-router';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::video-router.video-router'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Video Router'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -726,6 +1102,114 @@ export interface PluginContentReleasesReleaseAction
   };
 }
 
+export interface PluginCustomStrapiPluginMuxMuxAsset
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'muxassets';
+  info: {
+    description: 'Represents a Mux Asset item, including upload and playback details';
+    displayName: 'Mux Asset';
+    pluralName: 'mux-assets';
+    singularName: 'mux-asset';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
+  };
+  attributes: {
+    aspect_ratio: Schema.Attribute.String;
+    asset_data: Schema.Attribute.JSON;
+    asset_id: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    duration: Schema.Attribute.Decimal;
+    error_message: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    isReady: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::custom-strapi-plugin-mux.mux-asset'
+    > &
+      Schema.Attribute.Private;
+    playback_id: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    signed: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Configurable &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+        minLength: 3;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    upload_id: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+  };
+}
+
+export interface PluginCustomStrapiPluginMuxMuxTextTrack
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'muxtexttracks';
+  info: {
+    description: 'Temporary storage for user-defined subtitles & captions sent to Mux during video uploads';
+    displayName: 'Mux Text Track';
+    pluralName: 'mux-text-tracks';
+    singularName: 'mux-text-track';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    closed_captions: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    file: Schema.Attribute.JSON & Schema.Attribute.Required;
+    language_code: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::custom-strapi-plugin-mux.mux-text-track'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginI18NLocale extends Struct.CollectionTypeSchema {
   collectionName: 'i18n_locale';
   info: {
@@ -772,14 +1256,14 @@ export interface PluginI18NLocale extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface PluginMuxVideoUploaderMuxAsset
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'muxassets';
+export interface PluginNavigationAudience extends Struct.CollectionTypeSchema {
+  collectionName: 'audience';
   info: {
-    description: 'Represents a Mux Asset item, including upload and playback details';
-    displayName: 'Mux Video';
-    pluralName: 'mux-assets';
-    singularName: 'mux-asset';
+    description: '';
+    displayName: 'Audience';
+    name: 'audience';
+    pluralName: 'audiences';
+    singularName: 'audience';
   };
   options: {
     draftAndPublish: false;
@@ -793,63 +1277,77 @@ export interface PluginMuxVideoUploaderMuxAsset
     };
   };
   attributes: {
-    aspect_ratio: Schema.Attribute.String;
-    asset_data: Schema.Attribute.JSON;
-    asset_id: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
-      }>;
-    author: Schema.Attribute.Relation<'oneToOne', 'api::author.author'>;
+    Avatar: Schema.Attribute.Media<'images'>;
+    BillingHistory: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::billing-history.billing-history'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    duration: Schema.Attribute.Decimal;
-    error_message: Schema.Attribute.String &
+    Email: Schema.Attribute.Email &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    FirstName: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
+        maxLength: 100;
       }>;
-    isReady: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    FraudFlags: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    IsSubscriber: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    key: Schema.Attribute.UID<'Username'>;
+    LastLogin: Schema.Attribute.DateTime;
+    LastName: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'plugin::mux-video-uploader.mux-asset'
+      'plugin::navigation.audience'
     > &
       Schema.Attribute.Private;
-    playback_id: Schema.Attribute.String &
+    Password: Schema.Attribute.Password & Schema.Attribute.Required;
+    PhoneNumber: Schema.Attribute.String &
+      Schema.Attribute.Unique &
       Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
+        maxLength: 15;
       }>;
     publishedAt: Schema.Attribute.DateTime;
-    signed: Schema.Attribute.Boolean &
+    SignUpDate: Schema.Attribute.DateTime &
       Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<false>;
-    test: Schema.Attribute.String;
-    title: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'NOW'>;
+    SubscriptionPlan: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::subscription.subscription'
+    >;
+    SubscriptionStatus: Schema.Attribute.Enumeration<
+      ['NoSubscription', 'Active', 'Paused', 'Cancelled']
+    > &
       Schema.Attribute.Required &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
-        minLength: 3;
-      }>;
+      Schema.Attribute.DefaultTo<'NoSubscription'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    upload_id: Schema.Attribute.String &
+    Username: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
       Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
+        maxLength: 100;
       }>;
   };
 }
 
-export interface PluginMuxVideoUploaderMuxTextTrack
+export interface PluginNavigationNavigation
   extends Struct.CollectionTypeSchema {
-  collectionName: 'muxtexttracks';
+  collectionName: 'navigations';
   info: {
-    description: 'Temporary storage for user-defined subtitles & captions sent to Mux during video uploads';
-    displayName: 'Mux Text Track';
-    pluralName: 'mux-text-tracks';
-    singularName: 'mux-text-track';
+    displayName: 'Navigation';
+    name: 'navigation';
+    pluralName: 'navigations';
+    singularName: 'navigation';
   };
   options: {
+    comment: '';
     draftAndPublish: false;
   };
   pluginOptions: {
@@ -859,22 +1357,101 @@ export interface PluginMuxVideoUploaderMuxTextTrack
     'content-type-builder': {
       visible: false;
     };
+    i18n: {
+      localized: true;
+    };
   };
   attributes: {
-    closed_captions: Schema.Attribute.Boolean & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    file: Schema.Attribute.JSON & Schema.Attribute.Required;
-    language_code: Schema.Attribute.String & Schema.Attribute.Required;
+    items: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::navigation.navigation-item'
+    >;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::navigation.navigation'
+    >;
+    name: Schema.Attribute.Text & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    visible: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
+export interface PluginNavigationNavigationItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'navigations_items';
+  info: {
+    displayName: 'Navigation Item';
+    name: 'navigation-item';
+    pluralName: 'navigation-items';
+    singularName: 'navigation-item';
+  };
+  options: {
+    comment: 'Navigation Item';
+    draftAndPublish: false;
+    increments: true;
+    timestamps: true;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+    i18n: {
+      localized: false;
+    };
+  };
+  attributes: {
+    additionalFields: Schema.Attribute.JSON & Schema.Attribute.DefaultTo<{}>;
+    audience: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::navigation.audience'
+    >;
+    autoSync: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    collapsed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    externalPath: Schema.Attribute.Text;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'plugin::mux-video-uploader.mux-text-track'
+      'plugin::navigation.navigation-item'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String & Schema.Attribute.Required;
+    master: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::navigation.navigation'
+    >;
+    menuAttached: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    parent: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::navigation.navigation-item'
+    >;
+    path: Schema.Attribute.Text;
     publishedAt: Schema.Attribute.DateTime;
+    related: Schema.Attribute.Relation<'morphToMany'> &
+      Schema.Attribute.Required;
+    title: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    type: Schema.Attribute.Enumeration<['INTERNAL', 'EXTERNAL', 'WRAPPER']> &
+      Schema.Attribute.DefaultTo<'INTERNAL'>;
+    uiRouterKey: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1253,16 +1830,25 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::about.about': ApiAboutAbout;
       'api::article.article': ApiArticleArticle;
-      'api::author.author': ApiAuthorAuthor;
+      'api::billing-history.billing-history': ApiBillingHistoryBillingHistory;
       'api::bundle.bundle': ApiBundleBundle;
+      'api::carousel.carousel': ApiCarouselCarousel;
       'api::category.category': ApiCategoryCategory;
-      'api::external-video.external-video': ApiExternalVideoExternalVideo;
+      'api::content.content': ApiContentContent;
+      'api::creator.creator': ApiCreatorCreator;
+      'api::embedded-video.embedded-video': ApiEmbeddedVideoEmbeddedVideo;
+      'api::fraud-report.fraud-report': ApiFraudReportFraudReport;
       'api::global.global': ApiGlobalGlobal;
+      'api::subscription.subscription': ApiSubscriptionSubscription;
+      'api::video-router.video-router': ApiVideoRouterVideoRouter;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
+      'plugin::custom-strapi-plugin-mux.mux-asset': PluginCustomStrapiPluginMuxMuxAsset;
+      'plugin::custom-strapi-plugin-mux.mux-text-track': PluginCustomStrapiPluginMuxMuxTextTrack;
       'plugin::i18n.locale': PluginI18NLocale;
-      'plugin::mux-video-uploader.mux-asset': PluginMuxVideoUploaderMuxAsset;
-      'plugin::mux-video-uploader.mux-text-track': PluginMuxVideoUploaderMuxTextTrack;
+      'plugin::navigation.audience': PluginNavigationAudience;
+      'plugin::navigation.navigation': PluginNavigationNavigation;
+      'plugin::navigation.navigation-item': PluginNavigationNavigationItem;
       'plugin::review-workflows.workflow': PluginReviewWorkflowsWorkflow;
       'plugin::review-workflows.workflow-stage': PluginReviewWorkflowsWorkflowStage;
       'plugin::upload.file': PluginUploadFile;

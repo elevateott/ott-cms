@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_access_content_accesses",
+  "info": {
+    "displayName": "ContentAccess"
+  },
+  "options": {},
+  "attributes": {
+    "accessLevel": {
+      "type": "enumeration",
+      "enum": [
+        "public",
+        "gated"
+      ]
+    },
+    "downloadable": {
+      "type": "boolean"
+    },
+    "releaseDate": {
+      "type": "datetime"
+    },
+    "expirationDate": {
+      "type": "datetime"
+    }
+  }
+}

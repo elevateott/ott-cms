@@ -1,0 +1,20 @@
+{
+  "kind": "singleType",
+  "collectionName": "video_routers",
+  "info": {
+    "singularName": "video-router",
+    "pluralName": "video-routers",
+    "displayName": "Video",
+    "description": "Video management portal"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "default": "Video Router"
+    }
+  }
+}

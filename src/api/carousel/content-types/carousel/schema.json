@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "carousels",
+  "info": {
+    "singularName": "carousel",
+    "pluralName": "carousels",
+    "displayName": "Carousel",
+    "description": "A customizable row of videos for the frontend."
+  },
+  "options": {
+    "comment": ""
+  },
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 255
+    },
+    "SelectionType": {
+      "type": "enumeration",
+      "enum": [
+        "Category",
+        "Author",
+        "Custom"
+      ],
+      "default": "Category",
+      "description": "Determines how videos are selected for this carousel."
+    },
+    "Category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "description": "If 'Category' is selected, fetch videos from this category.",
+      "required": false
+    },
+    "Position": {
+      "type": "integer",
+      "required": true,
+      "default": 1,
+      "description": "The position of the carousel in the UI."
+    },
+    "Visibility": {
+      "type": "component",
+      "repeatable": false,
+      "component": "access.visibility",
+      "description": "Controls whether the carousel is published, scheduled, or expires."
+    }
+  }
+}
