@@ -1,4 +1,8 @@
-import { Duration } from 'luxon';
+// import { Duration } from 'luxon';
+// import * as luxon from 'luxon';
+// const { Duration } = luxon;
+
+const { Duration } = require('luxon');
 
 const secondsToFormattedString = (seconds: number) => {
   const date = Duration.fromMillis(seconds * 1000);

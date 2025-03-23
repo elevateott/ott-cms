@@ -4,6 +4,8 @@
   "compilerOptions": {
     "rootDir": "../",
     "baseUrl": ".",
-    "types": ["node", "luxon"]
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   }
 }
