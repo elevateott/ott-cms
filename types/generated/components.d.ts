@@ -3,11 +3,14 @@ import type { Schema, Struct } from '@strapi/strapi';
 export interface AccessContentAccess extends Struct.ComponentSchema {
   collectionName: 'components_access_content_accesses';
   info: {
+    description: '';
     displayName: 'ContentAccess';
   };
   attributes: {
-    accessLevel: Schema.Attribute.Enumeration<['public', 'gated']>;
-    downloadable: Schema.Attribute.Boolean;
+    accessLevel: Schema.Attribute.Enumeration<['public', 'gated']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'public'>;
+    downloadable: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     expirationDate: Schema.Attribute.DateTime;
     releaseDate: Schema.Attribute.DateTime;
   };
@@ -21,13 +24,13 @@ export interface AccessVisibility extends Struct.ComponentSchema {
     icon: 'eye';
   };
   attributes: {
-    ExpirationDate: Schema.Attribute.DateTime;
-    ScheduledDate: Schema.Attribute.DateTime;
-    Status: Schema.Attribute.Enumeration<
+    contentStatus: Schema.Attribute.Enumeration<
       ['Unpublished', 'Published', 'Scheduled']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Unpublished'>;
+    expirationDate: Schema.Attribute.DateTime;
+    scheduledDate: Schema.Attribute.DateTime;
   };
 }
 
@@ -44,22 +47,34 @@ export interface AnalyticsFoo2 extends Struct.ComponentSchema {
 export interface ContentResource extends Struct.ComponentSchema {
   collectionName: 'components_content_resources';
   info: {
+    description: '';
     displayName: 'Resource';
   };
   attributes: {
-    file: Schema.Attribute.Media;
-    title: Schema.Attribute.String;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 140;
+      }>;
+    file: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+        minLength: 3;
+      }>;
   };
 }
 
 export interface ContentSubtitle extends Struct.ComponentSchema {
   collectionName: 'components_content_subtitles';
   info: {
-    displayName: 'Subtitle';
+    description: '';
+    displayName: 'Subtitles';
   };
   attributes: {
-    file: Schema.Attribute.Media;
-    language: Schema.Attribute.Enumeration<['en', 'es', 'fr', 'de']>;
+    captionType: Schema.Attribute.Enumeration<['subtitles', 'captions']> &
+      Schema.Attribute.DefaultTo<'subtitles'>;
+    file: Schema.Attribute.Media<'files'> & Schema.Attribute.Required;
+    language: Schema.Attribute.Relation<'oneToOne', 'api::language.language'>;
   };
 }
 

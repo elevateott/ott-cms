@@ -745,38 +745,78 @@ export interface ApiEmbeddedVideoEmbeddedVideo
     };
   };
   attributes: {
+    aspectRatio: Schema.Attribute.Enumeration<
+      [
+        'ratio_16_9',
+        'ratio_4_3',
+        'ratio_1_1',
+        'ratio_9_16',
+        'ratio_21_9',
+        'custom',
+      ]
+    > &
+      Schema.Attribute.DefaultTo<'ratio_16_9'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText;
-    duration: Schema.Attribute.Integer;
-    featuredCategoryThumbnail: Schema.Attribute.Media;
-    featuredCategoryVideo: Schema.Attribute.Media;
-    hlsUrl: Schema.Attribute.String;
+    embedProvider: Schema.Attribute.Enumeration<
+      [
+        'Brightcove',
+        'Bunny',
+        'Castr',
+        'Cincopa',
+        'Cloudflare',
+        'Dacast',
+        'Hippo Video',
+        'IBM Video Streaming',
+        'JWPlayer',
+        'Kaltura',
+        'Panopto',
+        'Restream',
+        'StreamShark',
+        'StreamYard',
+        'Vidyard',
+        'Vimeo',
+        'Wistia',
+        'Wowza',
+        'Other',
+      ]
+    >;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::embedded-video.embedded-video'
     >;
+    playerOptions: Schema.Attribute.JSON;
     publishedAt: Schema.Attribute.DateTime;
-    shortDescription: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 500;
-      }>;
-    status: Schema.Attribute.Enumeration<['draft', 'published', 'archived']> &
-      Schema.Attribute.DefaultTo<'draft'>;
-    thumbnail: Schema.Attribute.Media;
-    Title: Schema.Attribute.String &
+    quality: Schema.Attribute.Enumeration<
+      [
+        'quality_auto',
+        'quality_1080p',
+        'quality_720p',
+        'quality_480p',
+        'quality_360p',
+        'quality_240p',
+        'quality_144p',
+      ]
+    > &
+      Schema.Attribute.DefaultTo<'quality_auto'>;
+    title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
         minLength: 3;
       }>;
-    trailerUrl: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    uploadedOn: Schema.Attribute.DateTime;
+    url: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+        minLength: 3;
+      }>;
   };
 }
 
@@ -852,6 +892,44 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     siteDescription: Schema.Attribute.Text & Schema.Attribute.Required;
     siteName: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLanguageLanguage extends Struct.CollectionTypeSchema {
+  collectionName: 'languages';
+  info: {
+    description: 'Defines language labels and codes.';
+    displayName: 'Language';
+    pluralName: 'languages';
+    singularName: 'language';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    code: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    label: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 50;
+        minLength: 3;
+      }>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::language.language'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1003,6 +1081,99 @@ export interface ApiVideoRouterVideoRouter extends Struct.SingleTypeSchema {
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Video Router'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiVideoVideo extends Struct.CollectionTypeSchema {
+  collectionName: 'videos';
+  info: {
+    description: '';
+    displayName: 'Video';
+    pluralName: 'videos';
+    singularName: 'video';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    contentAccess: Schema.Attribute.Component<'access.content-access', false> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Blocks &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    embeddedVideo: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::embedded-video.embedded-video'
+    >;
+    featuredCategoryThumbnail: Schema.Attribute.Media;
+    featuredCategoryVideo: Schema.Attribute.Media;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::video.video'>;
+    muxAsset: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::custom-strapi-plugin-mux.mux-asset'
+    >;
+    publicationStatus: Schema.Attribute.Component<'access.visibility', false> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    resources: Schema.Attribute.Component<'content.resource', true> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 10;
+        },
+        number
+      >;
+    SEO: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    shortDescription: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
+    sourceType: Schema.Attribute.Enumeration<['Mux', 'Embedded']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'Mux'>;
+    thumbnail: Schema.Attribute.Media;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+        minLength: 3;
+      }> &
+      Schema.Attribute.DefaultTo<'Title'>;
+    trailerUrl: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1166,6 +1337,7 @@ export interface PluginCustomStrapiPluginMuxMuxAsset
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
       }>;
+    video: Schema.Attribute.Relation<'oneToOne', 'api::video.video'>;
   };
 }
 
@@ -1839,8 +2011,10 @@ declare module '@strapi/strapi' {
       'api::embedded-video.embedded-video': ApiEmbeddedVideoEmbeddedVideo;
       'api::fraud-report.fraud-report': ApiFraudReportFraudReport;
       'api::global.global': ApiGlobalGlobal;
+      'api::language.language': ApiLanguageLanguage;
       'api::subscription.subscription': ApiSubscriptionSubscription;
       'api::video-router.video-router': ApiVideoRouterVideoRouter;
+      'api::video.video': ApiVideoVideo;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::custom-strapi-plugin-mux.mux-asset': PluginCustomStrapiPluginMuxMuxAsset;

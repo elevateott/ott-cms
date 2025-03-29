@@ -1,0 +1,119 @@
+{
+  "kind": "collectionType",
+  "collectionName": "videos",
+  "info": {
+    "singularName": "video",
+    "pluralName": "videos",
+    "displayName": "Video",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255,
+      "minLength": 3,
+      "default": "Title"
+    },
+    "description": {
+      "type": "blocks",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "shortDescription": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "sourceType": {
+      "type": "enumeration",
+      "enum": [
+        "Mux",
+        "Embedded"
+      ],
+      "default": "Mux",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "trailerUrl": {
+      "type": "string"
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false
+    },
+    "featuredCategoryThumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false
+    },
+    "featuredCategoryVideo": {
+      "type": "media",
+      "multiple": false,
+      "required": false
+    },
+    "publicationStatus": {
+      "type": "component",
+      "repeatable": false,
+      "component": "access.visibility",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "contentAccess": {
+      "type": "component",
+      "repeatable": false,
+      "component": "access.content-access",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "resources": {
+      "type": "component",
+      "repeatable": true,
+      "component": "content.resource",
+      "max": 10
+    },
+    "SEO": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "muxAsset": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::custom-strapi-plugin-mux.mux-asset"
+    },
+    "embeddedVideo": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::embedded-video.embedded-video"
+    }
+  }
+}

@@ -9,7 +9,7 @@
     "deploy": "strapi deploy",
     "dev": "strapi develop",
     "develop": "strapi develop",
-    "seed:example": "node ./scripts/seed.js",
+    "seed": "node ./scripts/seed.js",
     "start": "strapi start",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
@@ -20,15 +20,16 @@
     "@strapi/plugin-cloud": "5.11.2",
     "@strapi/plugin-users-permissions": "5.11.2",
     "@strapi/strapi": "^5.11.3",
+    "custom-strapi-plugin-mux": "file:src/plugins/custom-strapi-plugin-mux",
     "fs-extra": "^10.0.0",
     "mime-types": "^2.1.27",
     "pg": "8.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
+    "strapi-plugin-multi-select": "^2.1.1",
     "strapi-plugin-navigation": "^3.0.9",
-    "styled-components": "^6.0.0",
-    "custom-strapi-plugin-mux": "file:src/plugins/custom-strapi-plugin-mux"
+    "styled-components": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",

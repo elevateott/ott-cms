@@ -7,7 +7,7 @@
   },
   "options": {},
   "attributes": {
-    "Status": {
+    "contentStatus": {
       "type": "enumeration",
       "enum": [
         "Unpublished",
@@ -17,12 +17,12 @@
       "default": "Unpublished",
       "required": true
     },
-    "ScheduledDate": {
+    "scheduledDate": {
       "type": "datetime",
       "description": "The date and time when content should be published.",
       "required": false
     },
-    "ExpirationDate": {
+    "expirationDate": {
       "type": "datetime",
       "description": "The date and time when content should expire.",
       "required": false

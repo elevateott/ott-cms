@@ -1,15 +1,30 @@
 {
   "collectionName": "components_content_resources",
   "info": {
-    "displayName": "Resource"
+    "displayName": "Resource",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 100,
+      "minLength": 3
     },
     "file": {
-      "type": "media"
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 140
     }
   }
 }

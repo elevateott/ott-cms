@@ -1,7 +1,8 @@
 {
   "collectionName": "components_access_content_accesses",
   "info": {
-    "displayName": "ContentAccess"
+    "displayName": "ContentAccess",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -10,10 +11,13 @@
       "enum": [
         "public",
         "gated"
-      ]
+      ],
+      "default": "public",
+      "required": true
     },
     "downloadable": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "releaseDate": {
       "type": "datetime"

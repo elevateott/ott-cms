@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "languages",
+  "info": {
+    "singularName": "language",
+    "pluralName": "languages",
+    "displayName": "Language",
+    "description": "Defines language labels and codes."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 50,
+      "minLength": 3
+    },
+    "code": {
+      "type": "string",
+      "regex": "^[a-z]{2}(-[A-Z]{2})?$",
+      "required": true,
+      "unique": true
+    }
+  }
+}

@@ -1,21 +1,31 @@
 {
   "collectionName": "components_content_subtitles",
   "info": {
-    "displayName": "Subtitle"
+    "displayName": "Subtitles",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "language": {
-      "type": "enumeration",
-      "enum": [
-        "en",
-        "es",
-        "fr",
-        "de"
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "files"
       ]
     },
-    "file": {
-      "type": "media"
+    "captionType": {
+      "type": "enumeration",
+      "enum": [
+        "subtitles",
+        "captions"
+      ],
+      "default": "subtitles"
+    },
+    "language": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::language.language"
     }
   }
 }

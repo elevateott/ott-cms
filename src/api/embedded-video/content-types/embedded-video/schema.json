@@ -22,51 +22,71 @@
     }
   },
   "attributes": {
-    "Title": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255,
+      "minLength": 3
+    },
+    "url": {
       "type": "string",
       "maxLength": 255,
       "minLength": 3,
-      "required": true
+      "unique": true,
+      "required": true,
+      "regex": "https?:\\/\\/[a-zA-Z0-9.-]+(\\.[a-zA-Z]{2,})?(:[0-9]+)?(\\/[a-zA-Z0-9\\/_.:,?&=@%+\\-~#;!$'\\[\\]\\(\\)]+)?\\.m3u8"
     },
-    "description": {
-      "type": "richtext"
-    },
-    "shortDescription": {
-      "type": "string",
-      "maxLength": 500
-    },
-    "hlsUrl": {
-      "type": "string"
-    },
-    "trailerUrl": {
-      "type": "string"
-    },
-    "thumbnail": {
-      "type": "media",
-      "multiple": false
-    },
-    "featuredCategoryThumbnail": {
-      "type": "media",
-      "multiple": false
-    },
-    "featuredCategoryVideo": {
-      "type": "media",
-      "multiple": false
-    },
-    "status": {
+    "aspectRatio": {
       "type": "enumeration",
       "enum": [
-        "draft",
-        "published",
-        "archived"
+        "ratio_16_9",
+        "ratio_4_3",
+        "ratio_1_1",
+        "ratio_9_16",
+        "ratio_21_9",
+        "custom"
       ],
-      "default": "draft"
+      "default": "ratio_16_9"
     },
-    "uploadedOn": {
-      "type": "datetime"
+    "quality": {
+      "type": "enumeration",
+      "enum": [
+        "quality_auto",
+        "quality_1080p",
+        "quality_720p",
+        "quality_480p",
+        "quality_360p",
+        "quality_240p",
+        "quality_144p"
+      ],
+      "default": "quality_auto"
     },
-    "duration": {
-      "type": "integer"
+    "embedProvider": {
+      "type": "enumeration",
+      "enum": [
+        "Brightcove",
+        "Bunny",
+        "Castr",
+        "Cincopa",
+        "Cloudflare",
+        "Dacast",
+        "Hippo Video",
+        "IBM Video Streaming",
+        "JWPlayer",
+        "Kaltura",
+        "Panopto",
+        "Restream",
+        "StreamShark",
+        "StreamYard",
+        "Vidyard",
+        "Vimeo",
+        "Wistia",
+        "Wowza",
+        "Other"
+      ]
+    },
+    "playerOptions": {
+      "type": "json"
     }
   }
 }
