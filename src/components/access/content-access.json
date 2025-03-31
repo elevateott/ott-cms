@@ -9,10 +9,10 @@
     "accessLevel": {
       "type": "enumeration",
       "enum": [
-        "public",
-        "gated"
+        "Free",
+        "Gated"
       ],
-      "default": "public",
+      "default": "Free",
       "required": true
     },
     "downloadable": {

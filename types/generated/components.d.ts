@@ -7,9 +7,9 @@ export interface AccessContentAccess extends Struct.ComponentSchema {
     displayName: 'ContentAccess';
   };
   attributes: {
-    accessLevel: Schema.Attribute.Enumeration<['public', 'gated']> &
+    accessLevel: Schema.Attribute.Enumeration<['Free', 'Gated']> &
       Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'public'>;
+      Schema.Attribute.DefaultTo<'Free'>;
     downloadable: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     expirationDate: Schema.Attribute.DateTime;
     releaseDate: Schema.Attribute.DateTime;

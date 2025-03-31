@@ -141,9 +141,23 @@ const postDirectUpload = async (ctx: Context) => {
     ...config,
   };
 
-  await strapi.documents(ASSET_MODEL).create({ data });
+  const muxAsset = await strapi.documents(ASSET_MODEL).create({ data });
 
-  ctx.send(result);
+  // ✅ Auto-create linked Video entry using Query Engine (v5)
+  const newVideo = await strapi.db.query('api::video.video').create({
+    data: {
+      title: data.title || defaultMuxVideoTitle(),
+      sourceType: 'Mux',
+      muxAsset: muxAsset.id,
+      publicationStatus: 'Unpublished',
+      contentAccess: 'Free',
+    },
+  });
+
+  ctx.send({
+    ...result,
+    videoId: newVideo.id, // for frontend redirect
+  });
 };
 
 const postRemoteUpload = async (ctx: Context) => {
@@ -165,9 +179,34 @@ const postRemoteUpload = async (ctx: Context) => {
     ...config,
   };
 
-  await strapi.documents(ASSET_MODEL).create({ data });
+  const muxAsset = await strapi.documents(ASSET_MODEL).create({ data });
 
-  ctx.send(result);
+  const existingVideo = await strapi.db.query('api::video.video').findOne({
+    where: { muxAsset: muxAsset.id },
+  });
+
+  let newVideo = null;
+
+  if (!existingVideo) {
+    newVideo = await strapi.db.query('api::video.video').create({
+      data: {
+        title: data.title || defaultMuxVideoTitle(),
+        sourceType: 'Mux',
+        muxAsset: muxAsset.id,
+        publicationStatus: 'Unpublished',
+        contentAccess: 'Free',
+      },
+    });
+  }
+
+  if (newVideo !== null) {
+    ctx.send({
+      ...result,
+      videoId: newVideo.id, // for frontend redirect
+    });
+  } else {
+    ctx.send(result);
+  }
 };
 
 const deleteMuxAsset = async (ctx: Context) => {
@@ -306,6 +345,10 @@ const textTrack = async (ctx: Context) => {
   ctx.set({ 'Content-Type': contentType, 'Content-Disposition': `attachment; filename=${track.file.name}` });
   ctx.type = `${track.file.type}; charset=utf-8`;
   ctx.body = track.file.contents;
+};
+
+const defaultMuxVideoTitle = () => {
+  return `Mux Video - ${new Date().toLocaleDateString()}`;
 };
 
 export default {
