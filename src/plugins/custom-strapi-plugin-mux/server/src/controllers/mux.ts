@@ -141,22 +141,29 @@ const postDirectUpload = async (ctx: Context) => {
     ...config,
   };
 
+  // Create the Mux asset in Strapi
   const muxAsset = await strapi.documents(ASSET_MODEL).create({ data });
 
-  // ✅ Auto-create linked Video entry using Query Engine (v5)
+  // ✅ Auto-create a Video entry linked to this Mux asset
   const newVideo = await strapi.db.query('api::video.video').create({
     data: {
       title: data.title || defaultMuxVideoTitle(),
       sourceType: 'Mux',
       muxAsset: muxAsset.id,
-      publicationStatus: 'Unpublished',
-      contentAccess: 'Free',
+      publicationStatus: {
+        contentStatus: 'Unpublished'
+      },
+      contentAccess: {
+        accessLevel: 'Free',
+        downloadable: false
+      },
     },
   });
 
+  // Return both the Mux upload info and the Video ID
   ctx.send({
     ...result,
-    videoId: newVideo.id, // for frontend redirect
+    videoId: newVideo.id,
   });
 };
 

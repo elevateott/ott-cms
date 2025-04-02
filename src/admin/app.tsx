@@ -1,28 +1,15 @@
+// src/admin/app.tsx
 import type { StrapiApp } from "@strapi/strapi/admin";
 import MenuLogo from "./extensions/menu-logo.png";
 import favicon from "./extensions/favicon.ico";
 import VideoSelector from './extensions/components/video-selector';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@strapi/design-system';
-import { Plus } from '@strapi/icons';
-import { LinkButton } from '@strapi/design-system';
+import SourceTypeSelector from './extensions/components/source-type-selector';
 
-// Define types for the hook parameters
-interface LinkItem {
+interface ContentTypeAttribute {
+  name: string;
   type: string;
-  to?: string;
-  Component?: any;
-  label?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  customField?: string;
   [key: string]: any;
-}
-
-interface RightLinksHookParams {
-  contentType: {
-    uid: string;
-    [key: string]: any;
-  };
-  links: LinkItem[];
 }
 
 export default {
@@ -33,95 +20,75 @@ export default {
     menu: {
       logo: MenuLogo,
     },
-    locales: [
-      "en",
-      // 'ar',
-      // 'fr',
-      // 'cs',
-      // 'de',
-      // 'dk',
-      // 'es',
-      // 'he',
-      // 'id',
-      // 'it',
-      // 'ja',
-      // 'ko',
-      // 'ms',
-      // 'nl',
-      // 'no',
-      // 'pl',
-      // 'pt-BR',
-      // 'pt',
-      // 'ru',
-      // 'sk',
-      // 'sv',
-      // 'th',
-      // 'tr',
-      // 'uk',
-      // 'vi',
-      // 'zh-Hans',
-      // 'zh',
-    ],
+    locales: ["en"],
     translations: {
       en: {
         "app.components.LeftMenu.navbrand.title": "OTT CMS Dashboard",
         "videos.menu.title": "Videos",
+        "videos.dashboard": "Video Dashboard",
+        "videos.all": "All Videos",
+        "videos.mux": "Mux Videos",
+        "videos.embedded": "Embedded Videos",
+        "videos.categories": "Categories",
       },
     },
   },
   bootstrap(app: StrapiApp) {
-    console.log(app);
+    // Register our components
+    app.addComponents([
+      { name: 'video-selector', Component: VideoSelector },
+      { name: 'source-type-selector', Component: SourceTypeSelector }
+    ]);
 
-      // List all available hooks
-      //console.log('Available hooks:', Object.keys(app || {}));
+    // Add Video Management links to the main menu
+    app.addMenuLink({
+      to: '/video-dashboard',
+      icon: () => <span />,
+      intlLabel: {
+        id: 'videos.dashboard',
+        defaultMessage: 'Video Dashboard',
+      },
+      Component: async () => {
+        // This function needs to return a Promise with the component
+        return { default: VideoSelector };
+      },
+      permissions: [],
+    });
 
-      // app.registerHook('Admin/CM/pages/ListView/right-links', ({ contentType, links }) => {
-      //   console.log('Hook triggered!');
-      //   return { contentType, links };
-      // });
+    // Add other menu links for Videos, Mux Videos, etc.
+    app.addMenuLink({
+      to: `/content-manager/collectionType/api::video.video`,
+      icon: () => <span />,
+      intlLabel: {
+        id: 'videos.all',
+        defaultMessage: 'All Videos',
+      },
+      Component: async () => {
+        return { default: () => <div>All Videos</div> };
+      },
+      permissions: [],
+    });
 
-    // app.registerHook('Admin/CM/pages/ListView/inject-column-in-table', ({ displayedHeaders, layout }) => {
-    //   // This hook allows you to modify the list view columns
-    //   console.log('Mux assets hook triggered!', { displayedHeaders, layout });
+    // Register our custom field
+    app.addFields([
+      { type: 'sourceType', Component: SourceTypeSelector }
+    ]);
 
-    //   // Your modification logic here
-    //   // For example, you might want to add a custom action button:
-    //   if (layout.contentType.uid === 'plugin::custom-strapi-plugin-mux.mux-asset') {
-    //     // Modify the displayedHeaders or other properties
-    //     console.log('layout.contentType.uid', layout.contentType.uid);
-    //   }
-
-    //   return { displayedHeaders, layout };
-    // });
-
-    // You might also need this hook to override the "Create new entry" button
+    // Register hooks for custom UI enhancements
     // app.registerHook(
-    //   'Admin/CM/pages/ListView/right-links',
-    //   ({ contentType, links }: RightLinksHookParams) => {
-    //     console.log('registerHook triggered!', { contentType, links });
+    //   'Admin/CM/pages/EditView/mutateEditViewLayout',
+    //   ({ layout, query }) => {
+    //     if (query?.contentType === 'api::video.video') {
+    //       const sourceTypeIdx = layout.contentType.attributes.findIndex(
+    //         (attr: ContentTypeAttribute) => attr.name === 'sourceType'
+    //       );
 
-    //     // Check if we're on the mux-assets list view
-    //     if (contentType.uid === 'plugin::custom-strapi-plugin-mux.mux-asset') {
-    //       // Replace the default "Create new entry" link with your custom link
-    //       const modifiedLinks = links.map((link: LinkItem) => {
-    //         if (link.type === 'Button' && link.to?.includes('/create')) {
-    //           return {
-    //             ...link,
-    //             to: '/plugins/custom-strapi-plugin-mux', // Adjust this path to match your plugin's route
-    //             onClick: (e: React.MouseEvent) => {
-    //               e.preventDefault();
-    //               // Navigate to your plugin's interface
-    //               window.location.href = '/admin/plugins/custom-strapi-plugin-mux';
-    //             }
-    //           };
-    //         }
-    //         return link;
-    //       });
-
-    //       return { contentType, links: modifiedLinks };
+    //       if (sourceTypeIdx !== -1) {
+    //         layout.contentType.attributes[sourceTypeIdx].customField = 'sourceType';
+    //       }
     //     }
 
-    //     return { contentType, links };
+    //     return { layout };
     //   }
     // );
   },

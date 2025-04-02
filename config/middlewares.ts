@@ -10,7 +10,7 @@ export default [
   'strapi::favicon',
   'strapi::public',
   {
-    name: 'global::vtt-upload-check',
+    name: 'global::video-validation',
     config: {},
   },
 ];
