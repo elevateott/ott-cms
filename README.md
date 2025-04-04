@@ -1,61 +1,123 @@
-# 🚀 Getting started with Strapi
+# 🎬 OTT CMS – Fullstack Video Platform CMS
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+This project is a **multi-service OTT CMS platform** that includes:
 
-### `develop`
-
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
-
-```
-npm run develop
-# or
-yarn develop
-```
-
-### `start`
-
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
-npm run build
-# or
-yarn build
-```
-
-## ⚙️ Deployment
-
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
-```
-yarn strapi deploy
-```
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+- 🧠 **Strapi v5** – Headless CMS for managing videos, users, categories, and analytics.
+- 🌐 **Astro** – Blazing-fast frontend framework used to build the admin dashboard for clients.
+- 🎨 **TailwindCSS** – Utility-first CSS framework for styling the Astro admin interface.
+- 🔐 **Optional: Next.js** – Used separately to serve the subscriber-facing frontend (not included here).
 
 ---
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## 📁 Project Structure
+
+. ├── astro-admin/ # Astro frontend dashboard for clients (admin UI) ├── src/ # Strapi backend content types, plugins, extensions ├── scripts/ # Custom utilities like data seeding ├── node_modules/ # Shared dependencies ├── .env # Strapi environment variables ├── .gitignore ├── package.json # Unified scripts for both Strapi & Astro └── README.md
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js ≥ 18 (recommended LTS)
+- npm ≥ 6 (we’re using npm, not yarn)
+- PostgreSQL or SQLite (DB of your choice)
+- Git (optional, but recommended)
+
+---
+
+## 📦 Install Dependencies
+
+Install dependencies for both the root and Astro project:
+
+```bash
+npm install
+cd astro-admin && npm install
+
+🧪 Development Scripts
+You can run either service individually or both in parallel:
+
+Script	Description
+npm run dev	Start both Strapi & Astro
+npm run dev:strapi	Start only Strapi backend
+npm run dev:astro	Start only Astro frontend
+npm run build	Build both dashboards
+npm run build:strapi	Build Strapi admin panel
+npm run build:astro	Build Astro static site
+npm run start	Start both in production mode
+npm run start:strapi	Start Strapi in production
+npm run start:astro	Start Astro in production
+npm run seed	Run seed script for default data
+npm run upgrade	Upgrade Strapi to latest stable version
+
+
+⚙️ Environment Variables
+Root .env (for Strapi backend)
+
+DATABASE_URL=your_database_connection_string
+ADMIN_JWT_SECRET=your_secret
+APP_KEYS=your_keys
+API_TOKEN_SALT=your_salt
+STRAPI_TELEMETRY_DISABLED=true
+
+Astro .env (inside astro-admin/)
+PUBLIC_API_URL=http://localhost:1337/api
+
+🌐 Deployment
+App	Hosting Type	Suggested Host
+Strapi	Node.js app	Render, Railway
+Astro	Static/SSR frontend	Vercel, Netlify
+Each service deploys independently.
+
+Note: Make sure PUBLIC_API_URL in Astro points to your production Strapi API.
+
+🛠 Features
+✅ Admin dashboard built with Astro
+
+🔄 Real-time content updates from Strapi
+
+🎥 Video template support (Episode, Trailer, Clip)
+
+🔌 Support for Mux and embedded HLS streams
+
+🗂 Auto-created video filtering and badge indicators
+
+⚡ Custom actions for bulk video updates and deletions
+
+🧠 Tech Stack
+Strapi v5 – API & admin CMS
+
+Astro – Lightweight UI frontend
+
+TailwindCSS – For fast custom UI styling
+
+PostgreSQL – Primary DB (or SQLite)
+
+Render – For deploying both services
+
+🧰 Contributing
+
+# Clone the repo
+git clone https://github.com/your-org/ott-cms.git
+cd ott-cms
+npm install
+
+📚 Resources
+Strapi Docs
+
+Astro Docs
+
+TailwindCSS Docs
+
+Render Deployment Guide
+
+✨ License
+MIT © Elevate OTT, LLC
+
+<sub>Built with 💙 using Strapi, Astro & Tailwind to power scalable video content platforms.</sub>
+
+
+---
+
+Let me know if you’d like me to generate a `README.md` file and drop it into your actual project directory too.
+```

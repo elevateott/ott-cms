@@ -759,6 +759,7 @@ export interface ApiEmbeddedVideoEmbeddedVideo
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    duration: Schema.Attribute.Decimal;
     embedProvider: Schema.Attribute.Enumeration<
       [
         'Brightcove',
@@ -782,6 +783,13 @@ export interface ApiEmbeddedVideoEmbeddedVideo
         'Other',
       ]
     >;
+    hls_url: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+        minLength: 3;
+      }>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -810,13 +818,6 @@ export interface ApiEmbeddedVideoEmbeddedVideo
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    url: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
-        minLength: 3;
-      }>;
   };
 }
 
@@ -933,6 +934,35 @@ export interface ApiLanguageLanguage extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSettingSetting extends Struct.SingleTypeSchema {
+  collectionName: 'settings';
+  info: {
+    displayName: 'Settings';
+    pluralName: 'settings';
+    singularName: 'setting';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::setting.setting'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    videoSourceMode: Schema.Attribute.Enumeration<['Mux', 'Embedded', 'Both']> &
+      Schema.Attribute.DefaultTo<'Mux'>;
   };
 }
 
@@ -1104,6 +1134,8 @@ export interface ApiVideoVideo extends Struct.CollectionTypeSchema {
     };
   };
   attributes: {
+    aspect_ratio: Schema.Attribute.String;
+    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     contentAccess: Schema.Attribute.Component<'access.content-access', false> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1120,12 +1152,16 @@ export interface ApiVideoVideo extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    duration: Schema.Attribute.Decimal;
     embeddedVideo: Schema.Attribute.Relation<
       'oneToOne',
       'api::embedded-video.embedded-video'
     >;
     featuredCategoryThumbnail: Schema.Attribute.Media;
     featuredCategoryVideo: Schema.Attribute.Media;
+    isAutoCreated: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::video.video'>;
     muxAsset: Schema.Attribute.Relation<
@@ -2012,6 +2048,7 @@ declare module '@strapi/strapi' {
       'api::fraud-report.fraud-report': ApiFraudReportFraudReport;
       'api::global.global': ApiGlobalGlobal;
       'api::language.language': ApiLanguageLanguage;
+      'api::setting.setting': ApiSettingSetting;
       'api::subscription.subscription': ApiSubscriptionSubscription;
       'api::video-router.video-router': ApiVideoRouterVideoRouter;
       'api::video.video': ApiVideoVideo;

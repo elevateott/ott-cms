@@ -109,14 +109,6 @@ const ModalNewUpload = ({ isOpen, onToggle = () => {} }: { isOpen: boolean; onTo
       console.log(formatMessage('ModalNewUpload.unresolvable-upload-state', 'Unable to resolve upload state'));
     }
 
-    // ✅ If a videoId is returned from backend, redirect user to the new video entry
-    if (data?.videoId) {
-      setTimeout(() => {
-        window.location.href = `/content-manager/collectionType/api::video.video/${data.videoId}`;
-      }, 1200);
-      return;
-    }
-
     resetForm();
   };
 

@@ -1,21 +1,33 @@
 // src/api/video/content-types/video/lifecycles.ts
+
 export default {
   async beforeCreate(event) {
-    validateSourceType(event.params.data);
-    ensureRequiredComponents(event.params.data);
+    const data = event.params.data;
+    validateSourceType(data);
+    ensureRequiredComponents(data);
+    await applyTemplateDefaults(data);
   },
 
   async beforeUpdate(event) {
-    if (event.params.data.sourceType) {
-      validateSourceType(event.params.data);
+    const data = event.params.data;
+    if (data.sourceType) {
+      validateSourceType(data);
     }
-  }
+    if (data.template_type === 'trailer') {
+      data.status = 'draft';
+      data.is_test_asset = true;
+    }
+
+    if (data.template_type === 'episode') {
+      data.status = 'published';
+    }
+  },
 };
 
 function validateSourceType(data) {
-  if (!data.sourceType) return;
-
   const { sourceType, muxAsset, embeddedVideo } = data;
+
+  if (!sourceType) return;
 
   if (sourceType === 'Mux' && !muxAsset) {
     throw new Error('Mux source selected, but no Mux Asset is linked.');
@@ -25,30 +37,44 @@ function validateSourceType(data) {
     throw new Error('Embedded source selected, but no Embedded Video is linked.');
   }
 
-  if (sourceType === 'Mux' && embeddedVideo) {
-    // Clear the embedded video if source type is Mux
+  if (sourceType === 'Mux') {
     data.embeddedVideo = null;
-  }
-
-  if (sourceType === 'Embedded' && muxAsset) {
-    // Clear the Mux asset if source type is Embedded
+  } else if (sourceType === 'Embedded') {
     data.muxAsset = null;
   }
 }
 
 function ensureRequiredComponents(data) {
-  // Ensure publication status is set
   if (!data.publicationStatus) {
     data.publicationStatus = {
-      contentStatus: 'Unpublished'
+      contentStatus: 'Unpublished',
     };
   }
 
-  // Ensure content access is set
   if (!data.contentAccess) {
     data.contentAccess = {
       accessLevel: 'Free',
-      downloadable: false
+      downloadable: false,
     };
+  }
+}
+
+async function applyTemplateDefaults(data) {
+  if (!data.template_type) return;
+
+  const rules = {
+    trailer: { requireSource: 'Mux' },
+    episode: {},
+    clip: { allow: ['Embedded'] },
+  };
+
+  const rule = rules[data.template_type];
+
+  if (rule?.requireSource && data.sourceType !== rule.requireSource) {
+    throw new Error(`${data.template_type} templates must use ${rule.requireSource} source.`);
+  }
+
+  if (rule?.allow && !rule.allow.includes(data.sourceType)) {
+    throw new Error(`${data.template_type} templates only allow ${rule.allow.join(', ')} source types.`);
   }
 }

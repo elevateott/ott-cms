@@ -1,0 +1,24 @@
+{
+  "kind": "singleType",
+  "collectionName": "settings",
+  "info": {
+    "singularName": "setting",
+    "pluralName": "settings",
+    "displayName": "Settings"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "videoSourceMode": {
+      "type": "enumeration",
+      "enum": [
+        "Mux",
+        "Embedded",
+        "Both"
+      ],
+      "default": "Mux"
+    }
+  }
+}

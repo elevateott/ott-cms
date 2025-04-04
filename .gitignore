@@ -1,7 +1,6 @@
 ############################
-# OS X
+# OS & System Files
 ############################
-
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -9,123 +8,65 @@ Icon
 .Spotlight-V100
 .Trashes
 ._*
-
-
-############################
-# Linux
-############################
-
-*~
-
-
-############################
-# Windows
-############################
-
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
-*.cab
-*.msi
-*.msm
-*.msp
-
 
 ############################
-# Packages
+# Editor & IDE
 ############################
-
-*.7z
-*.csv
-*.dat
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.seed
-*.so
-*.swo
-*.swp
-*.swn
-*.swm
-*.out
-*.pid
-
-
-############################
-# Logs and databases
-############################
-
-.tmp
-*.log
-*.sql
-*.sqlite
-*.sqlite3
-
-
-############################
-# Misc.
-############################
-
-*#
-ssl
 .idea
-nbproject
-public/uploads/*
-!public/uploads/.gitkeep
+.vscode
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+
+############################
+# Build Outputs & Dependencies
+############################
+node_modules/
+dist/
+build/
+.cache/
 .tsbuildinfo
 .eslintcache
 
 ############################
-# Node.js
+# Astro (now in /frontend)
 ############################
-
-lib-cov
-lcov.info
-pids
-logs
-results
-node_modules
-.node_history
-
-############################
-# Package managers
-############################
-
-.yarn/*
-!.yarn/cache
-!.yarn/unplugged
-!.yarn/patches
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
-yarn-error.log
-
-############################
-# Tests
-############################
-
-coverage
+/frontend/node_modules/
+/frontend/.astro/
+/frontend/dist/
+/frontend/.vercel/
+/frontend/.netlify/
 
 ############################
 # Strapi
 ############################
-
 .env
-license.txt
-exports
-.strapi
-dist
-build
+exports/
+.strapi/
 .strapi-updater.json
 .strapi-cloud.json
+
+############################
+# Logs & Databases
+############################
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.sqlite
+*.sqlite3
+*.sql
+*.tmp
+*.pid
+*.seed
+
+############################
+# Static Uploads (Strapi)
+############################
+public/uploads/*
+!public/uploads/.gitkeep

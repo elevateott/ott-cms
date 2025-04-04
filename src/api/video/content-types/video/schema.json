@@ -49,6 +49,11 @@
         }
       }
     },
+    "isAutoCreated": {
+      "type": "boolean",
+      "default": false,
+      "configurable": true
+    },
     "trailerUrl": {
       "type": "string"
     },
@@ -56,6 +61,17 @@
       "type": "media",
       "multiple": false,
       "required": false
+    },
+    "duration": {
+      "type": "decimal"
+    },
+    "aspect_ratio": {
+      "type": "string"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category"
     },
     "featuredCategoryThumbnail": {
       "type": "media",
@@ -66,6 +82,16 @@
       "type": "media",
       "multiple": false,
       "required": false
+    },
+    "templateType": {
+      "type": "enumeration",
+      "enum": [
+        "episode",
+        "trailer",
+        "clip",
+        "bonus"
+      ],
+      "default": "clip"
     },
     "publicationStatus": {
       "type": "component",

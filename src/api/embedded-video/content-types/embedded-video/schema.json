@@ -28,13 +28,12 @@
       "maxLength": 255,
       "minLength": 3
     },
-    "url": {
+    "hls_url": {
       "type": "string",
       "maxLength": 255,
       "minLength": 3,
       "unique": true,
-      "required": true,
-      "regex": "https?:\\/\\/[a-zA-Z0-9.-]+(\\.[a-zA-Z]{2,})?(:[0-9]+)?(\\/[a-zA-Z0-9\\/_.:,?&=@%+\\-~#;!$'\\[\\]\\(\\)]+)?\\.m3u8"
+      "required": true
     },
     "aspectRatio": {
       "type": "enumeration",
@@ -47,6 +46,9 @@
         "custom"
       ],
       "default": "ratio_16_9"
+    },
+    "duration": {
+      "type": "decimal"
     },
     "quality": {
       "type": "enumeration",

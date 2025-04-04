@@ -141,30 +141,9 @@ const postDirectUpload = async (ctx: Context) => {
     ...config,
   };
 
-  // Create the Mux asset in Strapi
-  const muxAsset = await strapi.documents(ASSET_MODEL).create({ data });
+  await strapi.documents(ASSET_MODEL).create({ data });
 
-  // ✅ Auto-create a Video entry linked to this Mux asset
-  const newVideo = await strapi.db.query('api::video.video').create({
-    data: {
-      title: data.title || defaultMuxVideoTitle(),
-      sourceType: 'Mux',
-      muxAsset: muxAsset.id,
-      publicationStatus: {
-        contentStatus: 'Unpublished'
-      },
-      contentAccess: {
-        accessLevel: 'Free',
-        downloadable: false
-      },
-    },
-  });
-
-  // Return both the Mux upload info and the Video ID
-  ctx.send({
-    ...result,
-    videoId: newVideo.id,
-  });
+  ctx.send(result);
 };
 
 const postRemoteUpload = async (ctx: Context) => {
@@ -186,34 +165,9 @@ const postRemoteUpload = async (ctx: Context) => {
     ...config,
   };
 
-  const muxAsset = await strapi.documents(ASSET_MODEL).create({ data });
+  await strapi.documents(ASSET_MODEL).create({ data });
 
-  const existingVideo = await strapi.db.query('api::video.video').findOne({
-    where: { muxAsset: muxAsset.id },
-  });
-
-  let newVideo = null;
-
-  if (!existingVideo) {
-    newVideo = await strapi.db.query('api::video.video').create({
-      data: {
-        title: data.title || defaultMuxVideoTitle(),
-        sourceType: 'Mux',
-        muxAsset: muxAsset.id,
-        publicationStatus: 'Unpublished',
-        contentAccess: 'Free',
-      },
-    });
-  }
-
-  if (newVideo !== null) {
-    ctx.send({
-      ...result,
-      videoId: newVideo.id, // for frontend redirect
-    });
-  } else {
-    ctx.send(result);
-  }
+  ctx.send(result);
 };
 
 const deleteMuxAsset = async (ctx: Context) => {
@@ -352,10 +306,6 @@ const textTrack = async (ctx: Context) => {
   ctx.set({ 'Content-Type': contentType, 'Content-Disposition': `attachment; filename=${track.file.name}` });
   ctx.type = `${track.file.type}; charset=utf-8`;
   ctx.body = track.file.contents;
-};
-
-const defaultMuxVideoTitle = () => {
-  return `Mux Video - ${new Date().toLocaleDateString()}`;
 };
 
 export default {
