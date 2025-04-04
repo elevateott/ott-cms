@@ -1160,7 +1160,7 @@ export interface ApiVideoVideo extends Struct.CollectionTypeSchema {
     featuredCategoryThumbnail: Schema.Attribute.Media;
     featuredCategoryVideo: Schema.Attribute.Media;
     isAutoCreated: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
+      Schema.Attribute.Configurable &
       Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::video.video'>;
@@ -1201,6 +1201,10 @@ export interface ApiVideoVideo extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<'Mux'>;
+    templateType: Schema.Attribute.Enumeration<
+      ['episode', 'trailer', 'clip', 'bonus']
+    > &
+      Schema.Attribute.DefaultTo<'clip'>;
     thumbnail: Schema.Attribute.Media;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
